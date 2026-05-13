@@ -522,10 +522,12 @@ function buildReport(d, yest, mo, dy, wd) {
   var 채Items = mergeItems(채raw);
   var 컨Items = mergeItems(s['컨설팅'].컨부);
 
+  var 금일합계 = d.금일 + d.후입금;
+  var 전일합계 = dy_.금일 + dy_.후입금;
   var r = '';
   r += '대표님 '+mo+'월 '+dy+'일 '+wd+' 미수금 관련 보고드립니다.\n\n';
-  r += '* 금일 인재파견 미수금 현황 '+fmtNum(d.금일)+' 원\n';
-  r += '* 전일 인재파견 미수금 현황 '+fmtNum(dy_.금일)+' 원\n';
+  r += '* 전일 인재파견 미수금 + 후입금 현황 '+fmtNum(전일합계)+' 원\n';
+  r += '* 금일 인재파견 미수금 + 후입금 현황 '+fmtNum(금일합계)+' 원\n';
   r += '-------------------------------------------------------------\n';
   r += '- 전일 파견급여 미수금 현황 계 '+fmtNum(dy_.금일)+' 원\n\n';
   r += fourBlocks(dy_,'미수','미수계');
