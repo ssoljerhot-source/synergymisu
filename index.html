@@ -450,6 +450,8 @@ function parseSheet(rows) {
       continue;
     }
     if (/계$|합계$|미수$|이상입니다/.test(a)) continue;
+    if (a.indexOf('실제 청구된 금액') !== -1) continue;
+    if (a.indexOf('실제청구된금액') !== -1) continue;
     if (sub === 'skip' || !cur || !sub) continue;
     if (bv == null && bv !== 0) continue;
     if (amt > 0) d.s[cur][sub].push({name:a, amount:amt});
