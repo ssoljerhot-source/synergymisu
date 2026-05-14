@@ -522,7 +522,16 @@ function buildReport(d, yest, mo, dy, wd) {
   for (var i=0; i<linb.length; i++)  채raw.push({name:'[인]'+linb[i].name,  amount:linb[i].amount});
   for (var i=0; i<lpls.length; i++)  채raw.push({name:'[플]'+lpls[i].name,  amount:lpls[i].amount});
   var 채Items = mergeItems(채raw);
-  var 컨Items = mergeItems(s['컨설팅'].컨부);
+  // 모든 법인의 컨설팅부 합산
+  var 컨부All = [];
+  for (var ki=0; ki<CORPS.length; ki++) {
+    var ks = s[CORPS[ki]].컨부;
+    for (var kj=0; kj<ks.length; kj++) 컨부All.push(ks[kj]);
+  }
+  var 컨Items = mergeItems(컨부All);
+  // 컨설팅부 합계도 전체 법인 합산으로 재계산
+  var 컨부합계재계산 = 0;
+  for (var ki=0; ki<CORPS.length; ki++) 컨부합계재계산 += d.s[CORPS[ki]].컨부계;
 
   var 금일합계 = d.금일 + d.후입금;
   var 전일합계 = dy_.금일 + dy_.후입금;
@@ -551,7 +560,7 @@ function buildReport(d, yest, mo, dy, wd) {
     var col=maxW+5;
     for (var i=0;i<컨Items.length;i++) r += '- '+amtLine(컨Items[i].name,컨Items[i].amount,col);
   }
-  r += '\n  계 '+fmtNum(d.컨부합계)+'\n\n';
+  r += '\n  계 '+fmtNum(컨부합계재계산)+'\n\n';
   r += '* 온라인부\n- 없음\n\n* 시스템부\n- 없음\n\n';
   r += '* 채용대행\n';
   if (채Items.length === 0) { r += '- 없음\n'; }
