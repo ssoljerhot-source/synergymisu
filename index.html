@@ -62,7 +62,7 @@ input[type=date]:focus{border-color:#3b82f6}
 .dsec{display:none}.dsec.on{display:block}
 
 /* 3단 레이아웃 */
-.three-col{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:16px;margin-bottom:14px;align-items:start}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:16px;margin-bottom:14px;align-items:stretch}
 .col-hd{font-size:16px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;padding:10px 4px;border-bottom:3px solid #e2e8f0;margin-bottom:14px;display:flex;align-items:center;gap:7px}
 .col-hd.yest{border-bottom-color:#94a3b8;color:#334155}
 .col-hd.today{border-bottom-color:#3b82f6;color:#1d4ed8}
@@ -171,7 +171,7 @@ textarea#out{width:100%;min-height:560px;background:#fff;border:none;color:#1e25
 
   /* 대시보드 카드 - 1열 */
   .dash-grid{grid-template-columns:1fr;gap:10px}
-  .three-col{grid-template-columns:1fr;gap:12px}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:16px;margin-bottom:14px;align-items:stretch}
   .wrap-wide{padding:14px 12px}
 
   /* 전체합계 카드 - span 해제 */
@@ -270,25 +270,25 @@ textarea#out{width:100%;min-height:560px;background:#fff;border:none;color:#1e25
   <div class="dsec on" id="ds-전체">
     <div class="three-col">
       <!-- 전일 컬럼 -->
-      <div>
+      <div style="display:flex;flex-direction:column;gap:12px">
         <div class="col-hd yest">📅 전일</div>
-        <div id="dc-y-컨설팅" class="dc c-컨-y"></div>
-        <div id="dc-y-랩"     class="dc c-랩-y"></div>
-        <div id="dc-y-인"     class="dc c-인-y"></div>
-        <div id="dc-y-플"     class="dc c-플-y"></div>
+        <div id="dc-y-컨설팅" class="dc c-컨-y" style="flex:1"></div>
+        <div id="dc-y-랩"     class="dc c-랩-y" style="flex:1"></div>
+        <div id="dc-y-인"     class="dc c-인-y" style="flex:1"></div>
+        <div id="dc-y-플"     class="dc c-플-y" style="flex:1"></div>
       </div>
       <!-- 금일 컬럼 -->
-      <div>
+      <div style="display:flex;flex-direction:column;gap:12px">
         <div class="col-hd today">📊 금일</div>
-        <div id="dc-컨설팅" class="dc c-컨"></div>
-        <div id="dc-랩"     class="dc c-랩"></div>
-        <div id="dc-인"     class="dc c-인"></div>
-        <div id="dc-플"     class="dc c-플"></div>
+        <div id="dc-컨설팅" class="dc c-컨" style="flex:1"></div>
+        <div id="dc-랩"     class="dc c-랩" style="flex:1"></div>
+        <div id="dc-인"     class="dc c-인" style="flex:1"></div>
+        <div id="dc-플"     class="dc c-플" style="flex:1"></div>
       </div>
       <!-- 분석 컬럼 -->
       <div style="display:flex;flex-direction:column">
         <div class="col-hd analysis">📈 전일 vs 금일 분석</div>
-        <div id="dc-analysis" style="display:flex;flex-direction:column;gap:0"></div>
+        <div id="dc-analysis" style="display:flex;flex-direction:column;gap:12px;flex:1"></div>
       </div>
     </div>
   </div>
@@ -704,8 +704,7 @@ function renderAnalysis(today, yest) {
   var totT = today.금일 + today.후입금;
   var totY = yest ? (yest.금일 + yest.후입금) : 0;
   var totD = totT - totY;
-  var h = '<div class="an-col">';
-  h += '<div class="an-card">';
+  var h = '<div class="an-card" id="an-card-top" style="flex:1;display:flex;flex-direction:column">';
   h += '<div class="an-hd">📊 전체 합계 비교</div>';
   h += '<table class="an"><thead><tr><th>항목</th><th class="r">전일</th><th class="r">금일</th><th class="r">증감</th></tr></thead><tbody>';
 
@@ -734,9 +733,8 @@ function renderAnalysis(today, yest) {
   h += '</tbody></table></div>';
 
   // 법인별 비교
-  h += '</div>'; // an-col 닫기 (전체합계)
-  h += '<div class="an-col">';
-  h += '<div class="an-card">';
+  h += '</div>'; // an-card top 닫기
+  h += '<div class="an-card" id="an-card-bot" style="flex:1;display:flex;flex-direction:column">';
   h += '<div class="an-hd">🏢 법인별 비교</div>';
   h += '<table class="an"><thead><tr><th>법인</th><th class="r">전일</th><th class="r">금일</th><th class="r">증감</th></tr></thead><tbody>';
   for (var i=0; i<CORPS.length; i++) {
@@ -753,9 +751,8 @@ function renderAnalysis(today, yest) {
     h += '<td class="r"><span class="'+dc+'">'+ds+fmtNum(Math.abs(dv))+'</span></td>';
     h += '</tr>';
   }
-  h += '</tbody></table></div>';
-  h += '<div style="font-size:10px;color:#94a3b8;margin-top:6px;text-align:right">분석 시트: '+todaySheet+'</div>';
-
+  h += '</tbody></table></div>'; // an-card bot 닫기
+  h += '<div style="font-size:10px;color:#94a3b8;margin-top:4px;text-align:right">분석 시트: '+todaySheet+'</div>';
   el.innerHTML = h;
 }
 
