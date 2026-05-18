@@ -22,6 +22,7 @@ body{min-height:100vh;background:#f0f4f8;font-family:'Malgun Gothic','맑은 고
 /* 페이지 */
 .pg{display:none}.pg.on{display:block}
 .wrap{max-width:900px;margin:0 auto;padding:26px 22px;overflow-x:hidden}
+.wrap-wide{max-width:1400px;margin:0 auto;padding:20px 24px;overflow-x:hidden}
 /* 카드 */
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .card-lbl{font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
@@ -61,7 +62,7 @@ input[type=date]:focus{border-color:#3b82f6}
 .dsec{display:none}.dsec.on{display:block}
 
 /* 3단 레이아웃 */
-.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:14px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:16px;margin-bottom:14px}
 .col-hd{font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.6px;padding:8px 4px;border-bottom:2px solid #e2e8f0;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .col-hd.yest{border-bottom-color:#94a3b8;color:#64748b}
 .col-hd.today{border-bottom-color:#3b82f6;color:#3b82f6}
@@ -79,10 +80,10 @@ input[type=date]:focus{border-color:#3b82f6}
 .an-card{background:#fff;border:1px solid #e2e8f0;border-radius:11px;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .an-hd{padding:10px 14px;font-size:12px;font-weight:700;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#7c3aed;border-bottom:1px solid #e9d5ff}
 table.an{width:100%;border-collapse:collapse}
-table.an th{padding:7px 10px;font-size:11px;color:#94a3b8;font-weight:700;background:#f8fafc;text-align:left;border-bottom:1px solid #f1f5f9}
+table.an th{padding:7px 10px;font-size:11px;color:#94a3b8;font-weight:700;background:#f8fafc;text-align:left;border-bottom:1px solid #f1f5f9;white-space:nowrap}
 table.an th.r{text-align:right}
-table.an td{padding:7px 10px;font-size:12px;border-bottom:1px solid #f8fafc}
-table.an td.r{text-align:right;font-weight:600;font-family:'D2Coding',monospace;font-size:11px}
+table.an td{padding:7px 10px;font-size:12px;border-bottom:1px solid #f8fafc;white-space:nowrap}
+table.an td.r{text-align:right;font-weight:600;font-family:'D2Coding',monospace;font-size:11px;white-space:nowrap}
 table.an tr:last-child td{border-bottom:none}
 .an-up{color:#e11d48;font-weight:700}
 .an-dn{color:#2563eb;font-weight:700}
@@ -169,6 +170,7 @@ textarea#out{width:100%;min-height:560px;background:#fff;border:none;color:#1e25
   /* 대시보드 카드 - 1열 */
   .dash-grid{grid-template-columns:1fr;gap:10px}
   .three-col{grid-template-columns:1fr;gap:12px}
+  .wrap-wide{padding:14px 12px}
 
   /* 전체합계 카드 - span 해제 */
   .dc.c-전{grid-column:span 1}
@@ -255,7 +257,7 @@ textarea#out{width:100%;min-height:560px;background:#fff;border:none;color:#1e25
 
 <!-- 대시보드 -->
 <div class="pg" id="pg-dash">
-<div class="wrap">
+<div class="wrap-wide">
   <div class="dtabs">
     <div class="dtab on-전체" id="dt-전체"   onclick="goDtab('전체',this)">📊 전체 요약</div>
     <div class="dtab"         id="dt-컨설팅" onclick="goDtab('컨설팅',this)">🔵 시너지컨설팅</div>
