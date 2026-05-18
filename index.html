@@ -6,6 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>일일 미수금 보고서 자동화</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;background:#f0f4f8;font-family:'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',sans-serif;color:#1e2532}
@@ -55,6 +56,8 @@ input[type=date]:focus{border-color:#3b82f6}
 .dtabs::-webkit-scrollbar{display:none}
 .dtab{padding:7px 15px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;transition:all .15s;white-space:nowrap;flex-shrink:0}
 .dtab.on-전체{background:#f1f5f9;border-color:#cbd5e1;color:#1e2532}
+.btn-screenshot{padding:7px 15px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;transition:all .15s;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:5px}
+.btn-screenshot:hover{background:#fef3c7;border-color:#f59e0b;color:#d97706}
 .dtab.on-컨설팅{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
 .dtab.on-랩{background:#f0fdf4;border-color:#bbf7d0;color:#15803d}
 .dtab.on-인{background:#faf5ff;border-color:#e9d5ff;color:#7c3aed}
@@ -68,14 +71,14 @@ input[type=date]:focus{border-color:#3b82f6}
 .col-hd.today{border-bottom-color:#3b82f6;color:#1d4ed8}
 .col-hd.analysis{border-bottom-color:#8b5cf6;color:#6d28d9}
 /* 전일 카드 - 회색 계열 */
-.dc.c-컨-y{background:#f8fafc;border-color:#cbd5e1}
-.dc.c-랩-y{background:#f8fafc;border-color:#cbd5e1}
-.dc.c-인-y{background:#f8fafc;border-color:#cbd5e1}
-.dc.c-플-y{background:#f8fafc;border-color:#cbd5e1}
-.dc.c-컨-y .dc-name{color:#475569}
-.dc.c-랩-y .dc-name{color:#475569}
-.dc.c-인-y .dc-name{color:#475569}
-.dc.c-플-y .dc-name{color:#475569}
+.dc.c-컨-y{background:#f0f7ff;border-color:#bfdbfe}
+.dc.c-랩-y{background:#f0fdf6;border-color:#bbf7d0}
+.dc.c-인-y{background:#faf5ff;border-color:#e9d5ff}
+.dc.c-플-y{background:#fff8f0;border-color:#fed7aa}
+.dc.c-컨-y .dc-name{color:#1d4ed8}
+.dc.c-랩-y .dc-name{color:#15803d}
+.dc.c-인-y .dc-name{color:#7c3aed}
+.dc.c-플-y .dc-name{color:#c2410c}
 /* 분석 테이블 */
 .an-col{display:flex;flex-direction:column;gap:12px}
 .an-card{background:#fff;border:1px solid #e2e8f0;border-radius:11px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);flex:1}
@@ -260,12 +263,15 @@ textarea#out{width:100%;min-height:560px;background:#fff;border:none;color:#1e25
 <!-- 대시보드 -->
 <div class="pg" id="pg-dash">
 <div class="wrap-wide">
-  <div class="dtabs">
-    <div class="dtab on-전체" id="dt-전체"   onclick="goDtab('전체',this)">📊 전체 요약</div>
-    <div class="dtab"         id="dt-컨설팅" onclick="goDtab('컨설팅',this)">🔵 시너지컨설팅</div>
-    <div class="dtab"         id="dt-랩"     onclick="goDtab('랩',this)">🟢 시너지랩</div>
-    <div class="dtab"         id="dt-인"     onclick="goDtab('인',this)">🟣 시너지인사이트</div>
-    <div class="dtab"         id="dt-플"     onclick="goDtab('플',this)">🟠 플렉스에이치알</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px">
+    <div class="dtabs" style="margin-bottom:0;flex:1">
+      <div class="dtab on-전체" id="dt-전체"   onclick="goDtab('전체',this)">📊 전체 요약</div>
+      <div class="dtab"         id="dt-컨설팅" onclick="goDtab('컨설팅',this)">🔵 시너지컨설팅</div>
+      <div class="dtab"         id="dt-랩"     onclick="goDtab('랩',this)">🟢 시너지랩</div>
+      <div class="dtab"         id="dt-인"     onclick="goDtab('인',this)">🟣 시너지인사이트</div>
+      <div class="dtab"         id="dt-플"     onclick="goDtab('플',this)">🟠 플렉스에이치알</div>
+    </div>
+    <button class="btn-screenshot" id="btnScreenshot" style="flex-shrink:0">📸 스크린샷 저장</button>
   </div>
   <div class="dsec on" id="ds-전체">
     <div class="three-col">
@@ -843,6 +849,38 @@ function runGenerate() {
   reader.readAsArrayBuffer(selFile);
 }
 
+// ── 스크린샷 ─────────────────────────────────────
+function doScreenshot() {
+  var btn = document.getElementById('btnScreenshot');
+  var orig = btn.textContent;
+  btn.textContent = '⏳ 캡처 중...';
+  btn.disabled = true;
+
+  var target = document.getElementById('pg-dash');
+  html2canvas(target, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#f0f4f8',
+    scrollX: 0,
+    scrollY: -window.scrollY,
+    windowWidth: document.documentElement.scrollWidth,
+    windowHeight: document.documentElement.scrollHeight
+  }).then(function(canvas) {
+    var d = new Date();
+    var dateStr = d.getFullYear()+'.'+(d.getMonth()+1).toString().padStart(2,'0')+'.'+d.getDate().toString().padStart(2,'0');
+    var a = document.createElement('a');
+    a.download = '미수금대시보드_'+dateStr+'.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+    btn.textContent = '✅ 저장 완료!';
+    setTimeout(function(){ btn.textContent = orig; btn.disabled = false; }, 2000);
+  }).catch(function(err) {
+    alert('캡처 실패: ' + err.message);
+    btn.textContent = orig;
+    btn.disabled = false;
+  });
+}
+
 // ── 복사/저장 ─────────────────────────────────────
 function doCopy() {
   var text = document.getElementById('out').value;
@@ -893,6 +931,7 @@ window.addEventListener('DOMContentLoaded', function() {
   // 버튼
   document.getElementById('btnGen').addEventListener('click', runGenerate);
   document.getElementById('btnCopy').addEventListener('click', doCopy);
+  document.getElementById('btnScreenshot').addEventListener('click', doScreenshot);
   document.getElementById('btnSave').addEventListener('click', doSave);
   document.getElementById('btnAddEx').addEventListener('click', addExclude);
   document.getElementById('chkMerge').addEventListener('change', saveSettings);
