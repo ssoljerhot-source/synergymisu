@@ -263,15 +263,13 @@ textarea#out{width:100%;min-height:560px;background:#fff;border:none;color:#1e25
 <!-- 대시보드 -->
 <div class="pg" id="pg-dash">
 <div class="wrap-wide">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px">
-    <div class="dtabs" style="margin-bottom:0;flex:1">
-      <div class="dtab on-전체" id="dt-전체"   onclick="goDtab('전체',this)">📊 전체 요약</div>
-      <div class="dtab"         id="dt-컨설팅" onclick="goDtab('컨설팅',this)">🔵 시너지컨설팅</div>
-      <div class="dtab"         id="dt-랩"     onclick="goDtab('랩',this)">🟢 시너지랩</div>
-      <div class="dtab"         id="dt-인"     onclick="goDtab('인',this)">🟣 시너지인사이트</div>
-      <div class="dtab"         id="dt-플"     onclick="goDtab('플',this)">🟠 플렉스에이치알</div>
-    </div>
-    <button class="btn-screenshot" id="btnScreenshot" style="flex-shrink:0">📸 스크린샷 저장</button>
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px">
+    <div class="dtab on-전체" id="dt-전체"   onclick="goDtab('전체',this)"   style="text-align:center;justify-content:center">📊 전체 요약</div>
+    <div class="dtab"         id="dt-컨설팅" onclick="goDtab('컨설팅',this)" style="text-align:center;justify-content:center">🔵 시너지컨설팅</div>
+    <div class="dtab"         id="dt-랩"     onclick="goDtab('랩',this)"     style="text-align:center;justify-content:center">🟢 시너지랩</div>
+    <div class="dtab"         id="dt-인"     onclick="goDtab('인',this)"     style="text-align:center;justify-content:center">🟣 시너지인사이트</div>
+    <div class="dtab"         id="dt-플"     onclick="goDtab('플',this)"     style="text-align:center;justify-content:center">🟠 플렉스에이치알</div>
+    <button class="btn-screenshot" id="btnScreenshot" style="text-align:center;width:100%;border-radius:20px">📸 스크린샷 저장</button>
   </div>
   <div class="dsec on" id="ds-전체">
     <div class="three-col">
